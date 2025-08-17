@@ -21,12 +21,23 @@ int main() {
         {3, 2}  // linha 4, coluna c
     };
 
-    int navio_horizontal[4][2] = {
+    int navio_horizontal[3][2] = {
         {5, 4}, // linha 6, coluna E
         {5, 5}, // linha 6, coluna F
         {5, 6}, // linha 6, coluna G
-        {5, 7}  // linha 6, coluna H
     };    
+
+    int navio_diagonal_esquerda[3][2] = {
+        {0, 6}, //linha 1, coluna G
+        {1, 5}, //linha 2, coluna F
+        {2, 4}  //linha 3, coluna E
+    };
+
+    int navio_diagonal_direita[3][2] = {
+        {7, 2}, //linha 8, coluna H
+        {8, 3}, //linha 9, coluna I
+        {9, 4}  //linha 10, coluna J
+    };
 
     //INSERINDO NAVIOS
     //VERTICAL
@@ -39,11 +50,27 @@ int main() {
 
     //HORIZONTAL
 
-    for (i = 0; i < 4; i++) {
+    for (i = 0; i < 3; i++) {
         int x = navio_horizontal[i][0];
         int y = navio_horizontal[i][1];
         tabuleiro[x][y] = 3;
     }    
+
+    //DIAGONAL ESQUERDA
+
+    for (i = 0; i < 3; i++) {
+        int x = navio_diagonal_esquerda[i][0];
+        int y = navio_diagonal_esquerda[i][1];
+        tabuleiro[x][y] = 3;
+    }
+
+    //DIAGONAL DIREITA
+
+    for (i = 0; i < 3; i++) {
+        int x = navio_diagonal_direita[i][0];
+        int y = navio_diagonal_direita[i][0];
+        tabuleiro[x][y] = 3;
+    }
 
 
     //COLOCANDO NO CAMPO DE BATALHA
