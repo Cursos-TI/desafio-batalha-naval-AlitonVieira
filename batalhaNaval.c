@@ -1,6 +1,30 @@
 #include <stdio.h>
+#include <stdlib.h>
 
 #define TAMANHO 10 //definindo o tamanho fixo do campo de batalha para facilitar alterações de tamanho posteriores
+#define HABILIDADE 5 //definindo tamanho fixo das habilidades para facilitar futuras alterações
+
+//Aplicar habilidade no tabuleiro
+void aplicHabilidade(int tabuleiro[TAMANHO][TAMANHO], int habilidade[HABILIDADE][HABILIDADE], int origemX, int origemY) {
+    int i,j;
+    int offset = HABILIDADE / 2; //centralizando a matriz
+    
+    for (i = 0; i < HABILIDADE; i++) {
+        for(j = 0; j < HABILIDADE; j++) {
+            if (habilidade[i][j] == 1) {  //só irá aplicar se a matriz tiver 1
+                int x = origemX + (i - offset);
+                int y = origemY + (j - offset);
+
+                //Limites do tabuleiro
+                if (x >=0 && x < TAMANHO && y >=0 && y < TAMANHO) {
+                    if (tabuleiro[x][y] == 0) {
+                        tabuleiro[x][y] = 5;
+                    }
+                }
+            }
+        }
+    }
+} 
 
 int main() {
 
@@ -68,12 +92,53 @@ int main() {
 
     for (i = 0; i < 3; i++) {
         int x = navio_diagonal_direita[i][0];
-        int y = navio_diagonal_direita[i][0];
+        int y = navio_diagonal_direita[i][1];
         tabuleiro[x][y] = 3;
     }
 
 
-    //COLOCANDO NO CAMPO DE BATALHA
+    //HABILIDADES
+    int cone[HABILIDADE][HABILIDADE];
+    int cruz[HABILIDADE][HABILIDADE];
+    int octaedro[HABILIDADE][HABILIDADE];
+
+    //CONE
+    for (i = 0; i < HABILIDADE; i++) {
+        for (j = 0; j < HABILIDADE; j++) {
+            if (j >= (HABILIDADE/2 - i) && j <= (HABILIDADE/2 + i) && i <= HABILIDADE/2)
+                cone[i][j] = 1;
+            else
+                cone[i][j] = 0;
+        }
+    }
+
+    //CRUZ
+    for (i = 0; i < HABILIDADE; i++) {
+        for (j = 0; j < HABILIDADE; j++) {
+            if (i == HABILIDADE/2 || j == HABILIDADE/2)
+                cruz[i][j] = 1;
+            else
+                cruz[i][j] = 0;
+        }
+    }
+
+    //octaedro
+    for (i = 0; i < HABILIDADE; i++) {
+        for (j = 0; j < HABILIDADE; j++) {
+            if (abs(i - HABILIDADE/2) + abs(j - HABILIDADE/2) <= HABILIDADE/2)
+                octaedro[i][j] = 1;
+            else
+                octaedro[i][j] = 0;        
+        }
+    }
+
+    //Aplicando habilidades no tabuleiro
+    aplicHabilidade(tabuleiro, cone, 2, 7);
+    aplicHabilidade(tabuleiro, cruz, 7, 7);
+    aplicHabilidade(tabuleiro, octaedro, 4, 1);
+
+
+    //Imprimindo campo de batalha
 
     printf("   ");
     for (j = 0; j < TAMANHO; j++) {
@@ -84,7 +149,9 @@ int main() {
     for (i = 0; i < TAMANHO; i++) {
         printf("%2d ", i + 1);
         for (j = 0; j < TAMANHO; j++) {
-            printf("%2d ", tabuleiro[i][j]);
+            if (tabuleiro[i][j] == 0) printf(" ~ "); //água
+            else if (tabuleiro[i][j] == 3) printf(" # "); //navio
+            else if (tabuleiro[i][j] == 5) printf(" * "); //habilidade
         }
         printf("%2d\n", i + 1);
     }
